@@ -3,7 +3,7 @@ import numpy as np
 import streamlit as st
 from streamlit_option_menu import option_menu
 
-breast_cancer_model = pickle.load(open("breast_cancer_model.sav"), 'rb')
+breast_disease_model = pickle.load(open("breast_cancer_model.sav", 'rb'))
 
 st.title("BREAST DISEASE PREDICTION")
 
