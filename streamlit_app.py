@@ -87,7 +87,7 @@ user_input = [
 breast_cancer_prediction = ''
 if st.button('Diagnose'):
     user_input = [float(x) for x in user_input]
-    prediction = breast_cancer_model.predict([user_input])
+    prediction = breast_disease_model.predict([user_input])
     breast_cancer_prediction = 'No Breast Cancer' if prediction[0] == 1 else 'SUFFERING FROM Breast Cancer'
 
 st.success(breast_cancer_prediction)
