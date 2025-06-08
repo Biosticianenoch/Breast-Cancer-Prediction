@@ -126,5 +126,3 @@ with tab2:
     - Consider lifestyle changes.
     - Keep up with **clinical exams and doctor visits**.
     """)
-
----
