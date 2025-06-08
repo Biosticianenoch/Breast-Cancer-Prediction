@@ -2,20 +2,37 @@ import pickle
 import numpy as np
 import streamlit as st
 
-# Load model
+# Load trained model
 breast_disease_model = pickle.load(open("breast_cancer_model.sav", 'rb'))
 
-# App Title
-st.title("BREAST DISEASE PREDICTION")
+# Set page config
+st.set_page_config(page_title="Breast Disease App", layout="wide")
 
-# Create Tabs
-tab1, tab2 = st.tabs(["Diagnosis", "Recommendations"])
+# Create Navigation Tabs
+tab1, tab2, tab3, tab4 = st.tabs(["🏠 Welcome", "🔬 Diagnosis", "🩺 Recommendations", "❓ FAQ"])
 
-# ========== TAB 1: DIAGNOSIS ==========
+# ========== TAB 1: WELCOME ==========
 with tab1:
-    st.header("Input Tumor Characteristics")
+    st.title("Welcome to the Breast Disease Prediction App")
+    st.markdown("""
+    ### 👋 Hello!
+    This application uses a trained machine learning model to assist in the **early detection of breast cancer** based on tumor characteristics.
 
-    # Input Columns
+    #### 📌 What You Can Do Here:
+    - Enter tumor measurements under the **Diagnosis** tab.
+    - Get instant prediction results (Malignant or Benign).
+    - Read personalized health **Recommendations**.
+    - Explore common **FAQs** related to breast health.
+
+    #### 🧠 Disclaimer:
+    This app is for educational and informational purposes only and does not replace professional medical advice.
+    """)
+
+# ========== TAB 2: DIAGNOSIS ==========
+with tab2:
+    st.header("Breast Cancer Diagnosis Tool")
+
+    # Input Fields
     col1, col2, col3 = st.columns(3)
 
     with col1:
@@ -81,7 +98,6 @@ with tab1:
     with col3:
         fractal_dimension_worst = st.number_input('Worst Fractal Dimension')
 
-    # Create input list
     user_input = [
         radius_mean, texture_mean, perimeter_mean, area_mean, smoothness_mean,
         compactness_mean, concavity_mean, concave_points_mean, symmetry_mean, fractal_dimension_mean,
@@ -91,38 +107,52 @@ with tab1:
         compactness_worst, concavity_worst, concave_points_worst, symmetry_worst, fractal_dimension_worst
     ]
 
-    # Prediction button
-    breast_cancer_prediction = ''
-    if st.button('Diagnose'):
+    diagnosis_result = ''
+    if st.button("Diagnose"):
         user_input = [float(x) for x in user_input]
         prediction = breast_disease_model.predict([user_input])
-        breast_cancer_prediction = 'No Breast Cancer' if prediction[0] == 1 else 'Suffering from Breast Cancer'
+        diagnosis_result = '🟢 No Breast Cancer Detected' if prediction[0] == 1 else '🔴 Suffering from Breast Cancer'
+        st.success(diagnosis_result)
 
-    # Show result
-    st.success(breast_cancer_prediction)
-
-# ========== TAB 2: RECOMMENDATIONS ==========
-with tab2:
-    st.header("Health Recommendations")
+# ========== TAB 3: RECOMMENDATIONS ==========
+with tab3:
+    st.header("Health & Lifestyle Recommendations")
 
     st.markdown("""
-    ### ✅ General Recommendations for Breast Health:
-    - Perform **monthly self-breast exams**.
-    - Get **regular screenings and mammograms** as advised by your doctor.
-    - Maintain a **healthy weight** and eat a **balanced diet**.
-    - Limit **alcohol intake** and **avoid smoking**.
-    - Stay **physically active** — at least 30 minutes a day.
-    - Be aware of your **family history** of breast cancer.
-    - Consult a doctor if you notice **any changes in your breast** (lumps, size, shape, or discharge).
+    ### ✅ For Everyone:
+    - Conduct monthly **self-breast exams**.
+    - Schedule regular **mammograms** and **clinical check-ups**.
+    - **Exercise regularly** (30+ minutes/day).
+    - Eat a **balanced diet** (high in fiber, low in processed foods).
+    - Avoid **smoking** and **limit alcohol** consumption.
 
-    ### 🧠 If Predicted 'Suffering from Breast Cancer':
-    - Do not panic — early detection saves lives.
-    - Visit a **specialist** for further diagnosis (e.g., biopsy, imaging).
-    - Discuss treatment options: **surgery, chemotherapy, radiotherapy, or hormonal therapy**.
-    - Get emotional and mental support (counseling or support groups).
+    ### 🧠 If Diagnosed:
+    - **Seek professional medical guidance immediately.**
+    - Discuss possible treatments: **surgery, chemo, radiation, targeted therapy**.
+    - Join a **support group** or get **mental health counseling**.
+    - Involve family and friends in your care process.
 
-    ### 🧬 Preventive Measures:
-    - Genetic counseling if there's family history.
-    - Consider lifestyle changes.
-    - Keep up with **clinical exams and doctor visits**.
+    ### 🧬 For High-Risk Individuals:
+    - Consider **genetic testing**.
+    - Maintain a record of your **family medical history**.
+    - Consult a doctor for personalized screening schedules.
     """)
+
+# ========== TAB 4: FAQ ==========
+with tab4:
+    st.header("Frequently Asked Questions (FAQ)")
+
+    with st.expander("❓ What is breast cancer?"):
+        st.write("Breast cancer is a disease where cells in the breast grow uncontrollably, forming tumors that may be malignant (cancerous) or benign (non-cancerous).")
+
+    with st.expander("❓ Is this app a replacement for a doctor?"):
+        st.write("No. This app is for informational and educational purposes only. Always consult a medical professional for actual diagnosis and treatment.")
+
+    with st.expander("❓ What data does the model use?"):
+        st.write("The model uses features like radius, texture, perimeter, area, smoothness, and other tumor characteristics measured through clinical testing.")
+
+    with st.expander("❓ What does a 'malignant' result mean?"):
+        st.write("It means the model has found characteristics that are commonly associated with cancerous tumors. You should consult a physician immediately.")
+
+    with st.expander("❓ Can I use this for someone else’s report?"):
+        st.write("Yes, but make sure you're entering the correct data. For accurate diagnosis, the data should be from a verified medical test.")
