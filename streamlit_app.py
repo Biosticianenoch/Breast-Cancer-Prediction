@@ -8,7 +8,7 @@ from streamlit_extras.badges import badge
 from streamlit_extras.add_vertical_space import add_vertical_space
 
 # Load model
-breast_disease_model = pickle.load(open("breast_cancer_model.sav", 'rb'))
+breast_disease_model = pickle.load(open("breast_cancer_model1.sav", 'rb'))
 
 # Page settings
 st.set_page_config(page_title="Breast Cancer Disease Prediction", layout="wide")
